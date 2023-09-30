@@ -44,7 +44,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'apps.posts.apps.PostsConfig',
     'apps.blog.apps.BlogConfig',
     'apps.comments.apps.CommentsConfig',
     'apps.user.apps.UserConfig',
