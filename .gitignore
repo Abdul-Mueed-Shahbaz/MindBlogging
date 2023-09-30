@@ -3,3 +3,5 @@
 /blog_api/build/build-env/Lib/
 /blog_api/build/build-env/Scripts/
 /blog_api/build/build-env/pyvenv.cfg
+blog_api/build/build-env/
+blog_api/.idea/
