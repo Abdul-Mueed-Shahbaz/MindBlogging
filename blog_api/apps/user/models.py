@@ -1,11 +1,11 @@
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
 from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create(self, email, first_name, last_name):
+    def create(self, email, first_name, last_name, password=None):
         """
         Creates and saves a User with the given email and password.
         """
@@ -18,39 +18,42 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name
         )
-        user.set_unusable_password()
+        user.set_password(password)  # Set the password
         user.save(using=self._db)
         return user
 
-    def create_staff(self, email, first_name, last_name):
+    def create_staff(self, email, first_name, last_name, password=None):
         """
         Creates and saves a staff user with the given email and password.
         """
         user = self.create(
             email,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
+            password=password
         )
         user.staff = True
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name):
+    def create_superuser(self, email, first_name, last_name, password=None):
         """
         Creates and saves a superuser with the given email and password.
         """
         user = self.create(
             email,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
+            password=password
         )
         user.staff = True
         user.admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     first_name = models.CharField(max_length=255)
@@ -60,11 +63,13 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    password = None
     staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']  # Email & Password are required by default.
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'password']  # Include 'password' in required fields.
+
+    class Meta:
+        db_table = "user"
 
     def get_short_name(self):
         # The user is identified by their email address
@@ -80,5 +85,5 @@ class User(AbstractBaseUser):
 
     @property
     def is_admin(self):
-        """Is the user a admin member?"""
+        """Is the user an admin member?"""
         return self.admin
