@@ -1,18 +1,12 @@
+from rest_framework.viewsets import ModelViewSet
 from ..models import Blog
 from .serializers import BlogSerializer
-from rest_framework import permissions, viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from ...common.utils.auth import JwtAuthentication
 
-
-class MyModelViewSet(viewsets.ModelViewSet):
-    queryset = Blog.objects.order_by('created_on')
+class BlogViewSet(ModelViewSet):
     serializer_class = BlogSerializer
     parser_classes = (MultiPartParser, FormParser)
-    authentication_classes = JwtAuthentication
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
+    def get_queryset(self):
+        return Blog.objects.all().order_by('-created_on')
