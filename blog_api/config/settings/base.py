@@ -42,7 +42,8 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_filters',
 ]
 
 LOCAL_APPS = [
@@ -107,6 +108,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

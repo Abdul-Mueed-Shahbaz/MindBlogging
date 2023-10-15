@@ -1,4 +1,5 @@
 from django.db import transaction
+from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 from ..models import Blog, BlogIP
 from .serializers import BlogSerializer
@@ -12,6 +13,8 @@ class BlogViewSet(ModelViewSet):
     serializer_class = BlogSerializer
     parser_classes = (MultiPartParser, FormParser)
     authentication_classes = []
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
 
     def get_queryset(self):
         return Blog.objects.all().order_by(CREATED_ON)
