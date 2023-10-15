@@ -2,13 +2,11 @@ from django.contrib.auth import get_user_model
 from apps.blog.models import Blog
 from apps.common.models import models, BaseModel
 from django.utils.text import get_valid_filename
-import datetime
 
 
 def upload_to(instance, filename):
-    current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     sanitized_title = get_valid_filename(instance.blog.title)
-    return f'images/comments/{sanitized_title}_{current_time}/{filename}'
+    return f'images/comments/{sanitized_title}_{instance.user.id}/{filename}'
 
 
 class Comments(BaseModel):
