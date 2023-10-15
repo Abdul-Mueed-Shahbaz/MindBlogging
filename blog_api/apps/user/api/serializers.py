@@ -22,8 +22,7 @@ class RegisterSerializer(ModelSerializer):
         model = User
         fields = (
             'email',
-            'first_name',
-            'last_name',
+            'username',
             'password',  # Include password field
             'password_confirmation'  # Include password_confirmation field
         )
@@ -31,18 +30,22 @@ class RegisterSerializer(ModelSerializer):
             'password_confirmation': {'required': True},
         }
 
-    def create(self, validated_data):
-        password = validated_data.pop('password')  # Extract and remove password from validated_data
-        password_confirmation = validated_data.pop(
+    def validate(self, validated_data):
+        password = validated_data.get('password')  # Extract and remove password from validated_data
+        password_confirmation = validated_data.get(
             'password_confirmation')  # Extract and remove password_confirmation from validated_data
 
         if password != password_confirmation:
-            ValidationError('Passwords do not match')
+            raise ValidationError('Passwords do not match')
+
+        return validated_data
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
 
         user = User.objects.create(
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            username=validated_data['username']
         )
         user.set_password(password)  # Set the user's password securely
         user.save()

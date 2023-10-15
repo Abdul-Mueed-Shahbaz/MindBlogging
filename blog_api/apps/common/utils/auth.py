@@ -9,7 +9,6 @@ from apps.user.models import User
 
 class JwtAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
-        # token = request.COOKIES.get('auth_token') or request.META.get('HTTP_AUTHTOKEN')
         token = get_authorization_header(request)
         # Header name should be Authorization and the value should be Bearer {Token value}
 

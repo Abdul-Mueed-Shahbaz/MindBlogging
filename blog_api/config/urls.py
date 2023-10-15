@@ -6,12 +6,14 @@ from rest_framework.routers import DefaultRouter
 
 from apps.blog.api.views import BlogViewSet
 from apps.comments.api.views import CommentsViewSet
+from apps.user.api.views import AuthViewSet
 
 api_prefix = 'api/v1/'
 router = DefaultRouter()
 
 router.register(api_prefix + r'blogs', BlogViewSet, basename='blogs')
 router.register(api_prefix + r'comments', CommentsViewSet, basename='comments')
+router.register(api_prefix + r'auth', AuthViewSet, basename='user')
 
 urlpatterns = [
     path(api_prefix + 'admin/', admin.site.urls),
