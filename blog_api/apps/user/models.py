@@ -74,7 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     def __str__(self):
-        return 'User object with email:{0} and username:{1}'.format(self.email, self.username)
+        return self.username
 
     @property
     def is_staff(self):

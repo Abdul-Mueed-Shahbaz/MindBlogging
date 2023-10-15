@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, ImageField
-from ..models import Blog
+from ..models import Blog, BlogIP
 
 
 class BlogSerializer(ModelSerializer):
@@ -16,4 +16,15 @@ class BlogSerializer(ModelSerializer):
             'description',
             'title_image',
             'content',
+        ]
+
+
+class BlogIp(ModelSerializer):
+    class Meta:
+        model = BlogIP
+        fields = [
+            'id',
+            'ip_address',
+            'blog',
+            'user'
         ]

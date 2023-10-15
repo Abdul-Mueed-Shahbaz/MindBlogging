@@ -1,8 +1,17 @@
 import jwt
 import datetime
 from django.conf import settings
-
 from apps.common.constants.app_constants import ACCESS, REFRESH
+from rest_framework_simplejwt.tokens import RefreshToken
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        REFRESH: str(refresh),
+        ACCESS: str(refresh.access_token),
+    }
 
 
 def create_token(user, expiration, token_type):
