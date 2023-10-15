@@ -29,3 +29,16 @@ class AuthViewSet(GenericViewSet):
             }
             return Response(response_data, status=201)
         return Response(serializer.errors, status=400)
+
+    @action(detail=False, methods=['post'], url_path='login', url_name='login a user')
+    def login(self, request):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            response_data = {
+                'message': 'User registered successfully',
+                'user': {**serializer.data},
+            }
+            return Response(response_data, status=201)
+        return Response(serializer.errors, status=400)

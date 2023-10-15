@@ -2,7 +2,7 @@ import jwt.exceptions
 from rest_framework import authentication
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
-from apps.common.constants.app_constants import INVALID_TOKEN_TYPE, UNAUTHORIZED
+from apps.common.constants.app_constants import INVALID_TOKEN_TYPE, UNAUTHORIZED, ACCESS
 from apps.common.utils.utils import decode_token
 from apps.user.models import User
 
@@ -19,7 +19,7 @@ class JwtAuthentication(authentication.BaseAuthentication):
         try:
             payload = decode_token(token)
             token_type = payload['type']
-            if not token_type == 'access':
+            if token_type != ACCESS:
                 raise AuthenticationFailed(INVALID_TOKEN_TYPE)
             user = User.objects.filter(email=payload['email']).first()
         except jwt.ExpiredSignatureError:

@@ -204,6 +204,9 @@ AUTH_USER_MODEL = 'user.User'
 TOKEN_SECRET = env.str('TOKEN_SECRET', 'django-default-token-secret')
 ENCODING_ALGORITHM = env.str('ENCODING_ALGORITHM', 'HS256')
 
+ACCESS_TOKEN_EXPIRY = env.str('ACCESS_TOKEN_EXPIRY', 1)
+REFRESH_TOKEN_EXPIRY = env.str('REFRESH_TOKEN_EXPIRY', 30)
+
 # # To include the SMTP in backend
 #
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
