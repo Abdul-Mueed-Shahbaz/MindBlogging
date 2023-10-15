@@ -34,6 +34,7 @@ To get started with the Blog Project, follow these steps:
 
 1. Clone the repository to your local machine:
    ```bash
+   https://github.com/Abdul-Mueed-Shahbaz/MindBlogging.git
    
 2. **Install Project Dependencies:**
 
