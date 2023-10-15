@@ -1,17 +1,21 @@
-from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from rest_framework.serializers import ModelSerializer, EmailField, CharField, ValidationError
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
-from apps.user.models import User
+User = get_user_model()
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
+class RegisterSerializer(ModelSerializer):
+    email = EmailField(
         required=True,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
-    password = serializers.CharField(
+    password = CharField(
+        write_only=True, required=True, validators=[validate_password])
+
+    password_confirmation = CharField(
         write_only=True, required=True, validators=[validate_password])
 
     class Meta:
@@ -20,16 +24,21 @@ class RegisterSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
-            'password'  # Include password field
+            'password',  # Include password field
+            'password_confirmation'  # Include password_confirmation field
         )
         extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True},
-            'email': {'required': True},
+            'password_confirmation': {'required': True},
         }
 
     def create(self, validated_data):
         password = validated_data.pop('password')  # Extract and remove password from validated_data
+        password_confirmation = validated_data.pop(
+            'password_confirmation')  # Extract and remove password_confirmation from validated_data
+
+        if password != password_confirmation:
+            ValidationError('Passwords do not match')
+
         user = User.objects.create(
             email=validated_data['email'],
             first_name=validated_data['first_name'],

@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from ckeditor.fields import RichTextField
 from apps.common.models import models, BaseModel
 from apps.user.models import User

@@ -7,6 +7,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 class BlogViewSet(ModelViewSet):
     serializer_class = BlogSerializer
     parser_classes = (MultiPartParser, FormParser)
+    authentication_classes = []
 
     def get_queryset(self):
         return Blog.objects.all().order_by('-created_on')

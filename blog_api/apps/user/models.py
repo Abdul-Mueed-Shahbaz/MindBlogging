@@ -65,6 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     staff = models.BooleanField(default=False)  # a admin user; non super-user
     admin = models.BooleanField(default=False)  # a superuser
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'password']  # Include 'password' in required fields.
 
