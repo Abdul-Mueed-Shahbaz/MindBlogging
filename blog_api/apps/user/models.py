@@ -1,7 +1,11 @@
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, PermissionsMixin, AbstractUser
 )
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import ForeignKey, CASCADE
+
+from apps.common.models import BaseModel
 
 
 class UserManager(BaseUserManager):
@@ -85,3 +89,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_admin(self):
         """Is the user an admin member?"""
         return self.admin
+
+
+class UserRelationship(BaseModel):
+    following_user = ForeignKey(User, on_delete=CASCADE, related_name="follower")
+    followed_author = ForeignKey(User, on_delete=CASCADE, related_name="author")
+
+    class Meta:
+        db_table = "user_relationship"
+        unique_together = ('following_user', 'followed_author')
+
+    def clean(self):
+        if self.following_user == self.followed_author:
+            raise ValidationError("A user cannot follow themselves.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(UserRelationship, self).save(*args, **kwargs)
